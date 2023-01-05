@@ -1,14 +1,30 @@
-import dummy from '../db/data.json'
+import dummy from '../db/data.json';
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function DayList() {
-    console.log(dummy);
+    const [days, setDays] = useState([]);
+    const [count, setCount] = useState(0);
+
+    useEffect(()=> {
+        fetch('http://localhost:3001/days')
+        .then(res => {
+            return res.json()
+        })
+        .then(data => {
+            setDays(data);
+        });
+    }, []);
+
     return (
+        <>
         <ul className="list_day">
-            {dummy.days.map(day => (
+            {days.map(day => (
                 <li key={day.id}>
-                    Day {day.day}
+                    <Link to={`/day/${day.day}`}>Day {day.day}</Link>
                 </li>
             ))}
         </ul>
+        </>
     );
 }  
